@@ -1,30 +1,48 @@
 import React from 'react';
 import { View, TouchableOpacity, Text, Image, StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 
-const CardTask = () => {
-    const navigation = useNavigation();
+const CardTask = ({ titulo, pontos, data, hora, urgencia }) => {
+    const getImageByUrgencia = (nivel) => {
+        switch (nivel) {
+            case 'alta':
+                return require('../../assets/images/niveisurgencia/altapreto.png');
+            case 'media':
+                return require('../../assets/images/niveisurgencia/mediapreto.png');
+            case 'baixa':
+                return require('../../assets/images/niveisurgencia/baixapreto.png');
+            default:
+                return require('../../assets/images/niveisurgencia/livrepreto.png');
+        }
+    };
+
+    const getColorByUrgencia = (nivel) => {
+        switch (nivel) {
+            case 'alta':
+                return '#e83f3f';
+            case 'media':
+                return '#d0f400';
+            case 'baixa':
+                return '#1dd014';
+            default:
+                return '#eaeaea';
+        }
+    }
 
     return (
         <View style={styles.viewTask}>
-            <TouchableOpacity
-                style={styles.buttonStatusTask}
-                underlayColor="#FF9999"
-                // onPress={() => handlePress('TouchableOpacity')}
-            >
+            <TouchableOpacity style={[styles.buttonStatusTask, {backgroundColor: getColorByUrgencia(urgencia)}]}>
                 <Image
-                    source={require('../../assets/images/niveisurgencia/mediapreto.png')}
+                    source={getImageByUrgencia(urgencia)}
                     style={styles.imagem}
                 />
-                <Text style={styles.statusText}>MÉDIA</Text>
+                <Text style={styles.statusText}>{urgencia.toUpperCase()}</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
-                style={styles.buttonTask}
-                underlayColor="#FF9999"
-                // onPress={() => handlePress('TouchableOpacity')}
-                >
-                <Text style={styles.guiasText}>Todas</Text>
+            <TouchableOpacity style={styles.buttonTask}>
+                <Text style={styles.guiasText}>{titulo}</Text>
+                <Text style={styles.pointsText}>{pontos}</Text>
+                <Text style={styles.dataText}>{data}</Text>
+                <Text style={styles.timeText}>{hora}</Text>
             </TouchableOpacity>
         </View>
     );
@@ -43,7 +61,6 @@ const styles = StyleSheet.create({
     buttonStatusTask: {
         width: 70,
         height: 100,
-        backgroundColor: "#e7f300",
         paddingHorizontal: 10,
         borderTopLeftRadius: 10,
         borderBottomLeftRadius: 10,
@@ -73,6 +90,37 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
         marginVertical: 0, // <- importante
         paddingVertical: 2, // opcional para ajustar altura
+    },
+    guiasText: {
+        fontSize: 22,
+        fontFamily: 'Lato-Regular',
+        color: '#d9d9d9',
+        position: 'absolute',
+        top: 8,
+        maxWidth: 200,
+    },
+    pointsText: {
+        fontSize: 15,
+        fontFamily: 'Lato-Regular',
+        color: '#e5aa17',
+        position: 'absolute',
+        right: 20,
+        top: 10,
+    },
+    dataText: {
+        fontSize: 14,
+        fontFamily: 'Lato-Regular',
+        color: '#d9d9d9',
+        position: 'absolute',
+        top: 70,
+    },
+    timeText: {
+        fontSize: 14,
+        fontFamily: 'Lato-Regular',
+        color: '#d9d9d9',
+        position: 'absolute',
+        right: 20,
+        top: 70,
     },
 });
 
