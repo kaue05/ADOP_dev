@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, View, Text, Button, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { FlatList } from 'react-native-gesture-handler';
+import { useFocusEffect } from '@react-navigation/native';
+
 
 import Header from '../components/Header';
 import ProfileHomeScreen from '../components/ProfileHomeScreen';
@@ -7,11 +10,22 @@ import BotaoAddTask from '../components/BotaoAddTask';
 import BotaoGuias from '../components/BotaoGuias';
 import BotaoAddGuia from '../components/BotaoAddGuia';
 import CardTask from '../components/CardTask';
-import tasks from '../data/tasks.json';
+import { loadTask } from '../storage/localStorage';
 
 const HomeScreen = ({ navigation }) => {
-    const pendentes = tasks.filter(task => !task.concluida);
-    const concluidas = tasks.filter(task => task.concluida);
+    const [tarefas, setTarefas] = useState([]);
+    const [tasksConcluidas, setTasksConcluidas] = useState([])
+
+    useFocusEffect(
+        React.useCallback(() => {
+            const carregarTarefas = async () => {
+                const dados = await loadTask();
+                setTarefas(dados.filter(t => !t.concluida));
+                setTasksConcluidas(dados.filter(t => t.concluida));
+            };
+            carregarTarefas();
+    }, [])
+    );
 
     return (
         <View style={styles.container}>
@@ -22,27 +36,26 @@ const HomeScreen = ({ navigation }) => {
                     <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.guiasCategorias}>
                         <BotaoGuias />
                         <BotaoGuias />
-                        {/* <BotaoGuias />
-                        <BotaoGuias />
-                        <BotaoGuias />
-                        <BotaoGuias />
-                        <BotaoGuias /> */}
 
                         <BotaoAddGuia/>
                     </ScrollView>
                 </View>
 
-
-                {pendentes.map(task => (
-                    <CardTask
-                        key={task.id}
-                        titulo={task.titulo}
-                        pontos={task.pontos}
-                        data={task.data}
-                        hora={task.hora}
-                        urgencia={task.urgencia}
+                <View>
+                    <FlatList 
+                        data={tarefas}
+                        keyExtractor={(item) => item.id.toString()}
+                        renderItem={({ item }) => (
+                            <CardTask
+                                key={item.id}
+                                titulo={item.titulo}
+                                data={item.data}
+                                hora={item.hora}
+                                nivelUrgencia={item.nivelUrgencia}
+                            />
+                        )}
                     />
-                ))}
+                </View>
 
                 <View style={styles.separator}>
                     <View style={styles.line} />
@@ -50,17 +63,21 @@ const HomeScreen = ({ navigation }) => {
                     <View style={styles.line} />
                 </View>
 
-                {concluidas.map(task => (
-                    <CardTask
-                        key={task.id}
-                        titulo={task.titulo}
-                        pontos={task.pontos}
-                        data={task.data}
-                        hora={task.hora}
-                        urgencia={task.urgencia}
+                <View>
+                    <FlatList 
+                        data={tasksConcluidas}
+                        keyExtractor={(item) => item.id.toString()}
+                        renderItem={({ item }) => (
+                            <CardTask
+                                key={item.id}
+                                titulo={item.titulo}
+                                data={item.data}
+                                hora={item.hora}
+                                nivelUrgencia={item.nivelUrgencia}
+                            />
+                        )}
                     />
-                ))}
-
+                </View>
 
             </ScrollView>
 

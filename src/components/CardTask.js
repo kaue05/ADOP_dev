@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, TouchableOpacity, Text, Image, StyleSheet } from 'react-native';
 
-const CardTask = ({ titulo, pontos, data, hora, urgencia }) => {
+// const CardTask = ({ titulo, pontos, data, hora, urgencia }) => {
+const CardTask = ({ titulo, data, hora, nivelUrgencia }) => {
     const getImageByUrgencia = (nivel) => {
         switch (nivel) {
             case 'alta':
@@ -30,19 +31,27 @@ const CardTask = ({ titulo, pontos, data, hora, urgencia }) => {
 
     return (
         <View style={styles.viewTask}>
-            <TouchableOpacity style={[styles.buttonStatusTask, {backgroundColor: getColorByUrgencia(urgencia)}]}>
+            <TouchableOpacity style={[styles.buttonStatusTask, {backgroundColor: getColorByUrgencia(nivelUrgencia)}]}>
                 <Image
-                    source={getImageByUrgencia(urgencia)}
+                    source={getImageByUrgencia(nivelUrgencia)}
                     style={styles.imagem}
                 />
-                <Text style={styles.statusText}>{urgencia.toUpperCase()}</Text>
+                <Text style={styles.statusText}>{nivelUrgencia.toUpperCase()}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity style={styles.buttonTask}>
                 <Text style={styles.guiasText}>{titulo}</Text>
-                <Text style={styles.pointsText}>{pontos}</Text>
-                <Text style={styles.dataText}>{data}</Text>
-                <Text style={styles.timeText}>{hora}</Text>
+                {/* <Text style={styles.pointsText}>{pontos}</Text> */}
+                <Text style={styles.dataText}>
+                    {new Date(data).toLocaleDateString('pt-BR')}
+                </Text>
+                <Text style={styles.timeText}>
+                    {new Date(hora).toLocaleTimeString('pt-BR', {
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        hour12: false,
+                    })}
+                </Text>
             </TouchableOpacity>
         </View>
     );

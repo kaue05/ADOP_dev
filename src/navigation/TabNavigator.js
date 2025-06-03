@@ -5,7 +5,6 @@ import { Ionicons } from '@expo/vector-icons'; // Ícones bonitos e fáceis
 import HomeScreen from '../screens/HomeScreen';
 import ReportsScreen from '../screens/ReportsScreen';
 import TaskScreen from '../screens/TaskScreen';
-import AppNavigator from './AppNavigator';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();

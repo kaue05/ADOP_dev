@@ -8,6 +8,7 @@ import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import { NavigationContainer } from '@react-navigation/native';
 import AppNavigator from './src/navigation/AppNavigator';
+import Toast from 'react-native-toast-message';
 
 SplashScreen.preventAutoHideAsync(); // impede que o splash desapareça antes da hora
 
